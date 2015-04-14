@@ -4,7 +4,7 @@ require(ggplot2)
 setwd('/Users/rajeshmalpani/workspace/Data Science/Practical Data Science in R/Custdata')
 custdata <- read.table('custdata.tsv', sep='\t', header = TRUE )
 dim(custdata); head(custdata)
-
+summary(custdata)
 
 ### Cleanup data  ####
 summary(custdata[is.na(custdata$housing.type), c("recent.move", "num.vehicles")])
@@ -84,13 +84,17 @@ hhdata <- merge(hhdata, households, by="household_id") 	# Note: 3
 
 custvars <- colnames(custdata)        # vector of column names
 outcomes <- "health.ins"
-variables <- setdiff(colnames(custTrain), c(outcomes))
-categoricVars <- variables[sapply(custTrain[,variables],class) %in% c('factor','character', 'logical')]   # Note: 9 
-numericalVars <- variables[sapply(custTrain[,variables],class) %in% c('numeric','integer')]   # Note: 10 
+variables <- setdiff(colnames(custdata), c(outcomes))
+categoricVars <- variables[sapply(custdata[,variables],class) %in% c('factor','character', 'logical')]   # Note: 9 
+numericalVars <- variables[sapply(custdata[,variables],class) %in% c('numeric','integer')]   # Note: 10 
 class(custdata)
 
-plot(custTrain) 
-ggplot(custTrain) + geom_histogram(aes(y=health.ins, y=marital.stat)) 
+summary(custdata)
+summary(trainingSet)
+# trainingSet <- trainingSet[,c("state.of.res", "custid","sex", "income", "marital.stat", "health.ins", 
+#                               "age", "is.employed.fix1", "age.normalized", "Median.Income.x", "income.norm", "gp", "age.range")]
+plot(trainingSet) 
+ggplot(trainingSet) + geom_histogram(aes(y=health.ins, y=marital.stat)) 
 
 ### Information Gain + Entropy for field selection ####
 require(FSelector)
